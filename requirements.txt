@@ -1,0 +1,6 @@
+unihandecode
+beautifulsoup4
+requests
+python-dateutil
+html5lib
+sqlite3
