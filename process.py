@@ -10,7 +10,8 @@ matchTimestamp = re.compile(r"\d+/\d+/\d+ \d+:\d+:\d+\.\d+")
 originTime = datetime(1970, 1, 1)
 
 class Message(object):
-    def __init__(self, id, thread_id, t, m):
+    def __init__(self, name, id, thread_id, t, m):
+        self.name = name
         self.id = id
         self.thread_id = thread_id
         self.timestamp = t
@@ -21,7 +22,7 @@ class Dummy(object):
         return ''
 dummy = Dummy()
 
-def process(index, url):
+def process(index, url, name):
     url = url.replace('/l50', '')
     thread_id = url.split('/')[-1].strip()
     r = requests.get(url)
@@ -59,7 +60,7 @@ def process(index, url):
 
         message = t.find(class_="message").get_text() \
                     .replace('\n', '').replace('\r', '').strip()
-        result[id-1] = Message(id, thread_id, timestamp, message)
+        result[id-1] = Message(name, id, thread_id, timestamp, message)
     return result
 
 if __name__ == '__main__':

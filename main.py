@@ -94,8 +94,8 @@ def processTopicLinksToGetDialogs(rerun=False, maxParallel=2):
     c = conn.cursor()
 
     c.execute(("create table if not exists messages ("
-            "id int,"
             "name unicode,"
+            "id int,"
             "thread_id text,"
             "message text,"
             "primary key (id, name, thread_id)"
@@ -108,11 +108,11 @@ def processTopicLinksToGetDialogs(rerun=False, maxParallel=2):
                 continue
             print "Processing %s: %s" % (key, url)
             workers += 1
-            result = pool.apply_async(process, (index, url,))
+            result = pool.apply_async(process, (index, url, name,))
             index += 1
             tf = True
             while workers > maxParallel:
-                time.sleep(5)
+                time.sleep(3)
                 for i, j in enumerate(workersList):
                     if j and j.ready():
                         data = j.get()
@@ -120,7 +120,7 @@ def processTopicLinksToGetDialogs(rerun=False, maxParallel=2):
                             try:
                                 c.execute(
                                     "INSERT INTO messages values (?,?,?,?)",
-                                    (name, d.id, d.thread_id, d.message,))
+                                    (d.name, d.id, d.thread_id, d.message,))
                             except sqlite3.IntegrityError as e:
                                 print e
                                 pass
@@ -141,8 +141,9 @@ def processTopicLinksToGetDialogs(rerun=False, maxParallel=2):
     pool.join()
     for i in workersList:
         data = i.get()
-        conn.execute("INSERT INTO messages values (?,?,?)", (
-            data.thread_id, data.id, data.message))
+        for d in data:
+            conn.execute("INSERT INTO messages values (?,?,?,?)", (
+                d.name, d.id, d.thread_id, d.message))
     c.commit()
     c.close()
 
@@ -155,7 +156,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--process', help="process generated topic links",
                         action='store_true')
     parser.add_argument('-w', '--worker', type=int, help="number of workers",
-                        default=2)
+                        default=3)
     args = parser.parse_args()
     print args
     if args.topic:
