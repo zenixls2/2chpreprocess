@@ -5,6 +5,7 @@ import cPickle
 MENU_URL = "http://menu.2ch.net/bbstable.html"
 MENU_PATH = "./save/menu.pkl"
 
+
 def getMenu(save=True):
     r = requests.get(MENU_URL)
     if r.status_code != 200 and r.status_code != 204:
@@ -20,11 +21,13 @@ def getMenu(save=True):
             cPickle.dump(menu, f, cPickle.HIGHEST_PROTOCOL)
     return menu
 
+
 def loadMenu():
     with open(MENU_PATH, 'rb') as f:
         menu = cPickle.load(f)
         return menu
     return None
+
 
 if __name__ == '__main__':
     getMenu()

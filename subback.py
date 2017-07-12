@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup as bs
 
 subIndex = re.compile(r"^\d+: ")
 
+
 def getTopics(baseUrl):
     subbackUrl = urlparse.urljoin(baseUrl, 'subback.html')
     topic = {}
@@ -22,7 +23,7 @@ def getTopics(baseUrl):
             key = subIndex.sub("", t.get_text())
             topic[key] = urlparse.urljoin(baseUrl, t['href'])
     except Exception as e:
-        print subbackUrl
-        print e
+        print(subbackUrl)
+        print(e)
+        raise e
     return topic
-
