@@ -52,7 +52,8 @@ And crawl through all threads:
 source venv/bin/activate
 python main.py -p -w ${WORKER}
 ```
-Notice that this could stop at any time.
+Notice that this could stop by users at any time.
+The process could be recovered using the `checkpoint.pkl` file stored in `save`.
 The result is by default save in `save` directory.
 You could use `-r` to ignore the checkpoint settings and re-run.
 
