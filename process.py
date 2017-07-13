@@ -66,7 +66,8 @@ def process(index, url, name):
                 except Exception as e:
                     print(url)
                     print(dtstring)
-                    raise e
+                    # some errr str is like 2006/03/32(土) 18:13:35.00
+                    # we are unable to parse it here
             elif id >= 2:
                 timestamp = result[id-2].timestamp
 
