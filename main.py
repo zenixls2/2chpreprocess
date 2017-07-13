@@ -108,13 +108,13 @@ def processTopicLinksToGetDialogs(rerun=False, maxParallel=2):
             print("Processing %s: %s" % (key, url))
             workers += 1
             result = pool.apply_async(process, (index, url, name,))
-            index += 1
             tf = True
             while workers > maxParallel:
                 time.sleep(3)
                 for i, j in enumerate(workersList):
                     if j and j.ready():
                         data = j.get()
+                        index += 1
                         for d in data:
                             try:
                                 c.execute(

@@ -10,7 +10,7 @@ The crawler part is almost complete, but the preprocessor part is still under de
 
 ### Features
 - Ignore some functional boards, and crawl through all the threads in 2ch
-- checkpoint recovery (known bug for ignoring running processes)
+- checkpoint recovery (bug should be fixed now)
 - multiple workers for crawling
 - save to sqlite db
 
