@@ -69,7 +69,7 @@ def process(index, url, name):
                     print(dtstring)
                     # some errr str is like 2006/03/32(土) 18:13:35.00
                     # we are unable to parse it here
-            elif id >= 2:
+            elif id >= 2 and result[id-2]:
                 timestamp = result[id-2].timestamp
 
         message = t.find(class_="message").get_text() \
