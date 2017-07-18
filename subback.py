@@ -15,6 +15,13 @@ def getTopics(baseUrl):
             raise Exception("connection fail for getting topic summary: " +
                             str(r.status_code) + " " +
                             subbackUrl)
+
+        # if 301 redirect, the baseUrl might change.
+        # one example is from http://daily.2ch.net/idolplus/subback.html
+        # to https://asahi.2ch.net/idolplus/subback.html
+        subbackUrl = r.url or subbackUrl
+        baseUrl = subbackUrl.replace('subback.html', '')
+
         ubody = unicode(r.content, 'shift-jis', 'replace')
         soup = bs(ubody, 'html.parser')
         baseUrl = urlparse.urljoin(baseUrl, soup.find('base')['href'] or '')
@@ -27,3 +34,7 @@ def getTopics(baseUrl):
         print(e)
         raise e
     return topic
+
+if __name__ == '__main__':
+    for key, url in getTopics("http://daily.2ch.net/idolplus/").iteritems():
+        print(key, url)
